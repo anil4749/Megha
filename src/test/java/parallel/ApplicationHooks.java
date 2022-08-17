@@ -1,15 +1,13 @@
-package AppHooks;
+package parallel;
 
-import java.io.File;
 import java.util.Properties;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.BeforeClass;
 
 import com.qa.factory.DriverFactory;
-import com.utils.ConfigReader;
+import com.qa.util.ConfigReader;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -19,14 +17,10 @@ public class ApplicationHooks {
 
 	private DriverFactory driverFactory;
 	private WebDriver driver;
-	//private WebDriver driver = new ChromeDriver();
-	
-	
 	private ConfigReader configReader;
 	Properties prop;
 
 	@Before(order = 0)
-	//@BeforeClass(Priority=0)
 	public void getProperty() {
 		configReader = new ConfigReader();
 		prop = configReader.init_prop();
@@ -34,10 +28,8 @@ public class ApplicationHooks {
 
 	@Before(order = 1)
 	public void launchBrowser() {
+		String browserName = prop.getProperty("browser");
 		driverFactory = new DriverFactory();
-		String browserName = prop.getProperty("browser");  //browserName=Chrome;
-		
-		
 		driver = driverFactory.init_driver(browserName);
 		
 	}
@@ -49,12 +41,10 @@ public class ApplicationHooks {
 
 	@After(order = 1)
 	public void tearDown(Scenario scenario) {
-		if (scenario.isFailed()==true) {
+		if (scenario.isFailed()==true||scenario.isFailed()==false) {
 			// take screenshot:
 			String screenshotName = scenario.getName().replaceAll(" ", "_");
 			byte[] sourcePath = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-			
-			//File n=((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 			scenario.attach(sourcePath, "image/png", screenshotName);
 
 		}

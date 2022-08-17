@@ -13,8 +13,6 @@ public class DriverFactory {
 
 	public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
 
-	//WebDriver driver = new ChromeDrive();
-	//WebDriver driver = new FirefoxDriver();
 	/**
 	 * This method is used to initialize the thradlocal driver on the basis of given
 	 * browser
